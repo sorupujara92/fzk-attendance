@@ -1,14 +1,21 @@
 .login-component{
     width: 100%;
     height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    min-height: 100vh;
     display: flex;
-    background-image: "url('https://media.geeksforgeeks.org/wp-content/uploads/rk.png')" ;
+    background-image: url("https://venngage-wordpress.s3.amazonaws.com/uploads/2018/09/Natural-Wood-Panels-Simple-Background-Image.jpeg");
     .signin-component {
-        width: 30%;
-        height: 30%;
-        margin-top: 20%;
+        width: 20%;
+        height: 20%;
+        margin-top: 5%;
         margin-left: 70%;
         margin-right: 10%;
-        margin-bottom: 40%;
+        margin-bottom: 100%;
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 }

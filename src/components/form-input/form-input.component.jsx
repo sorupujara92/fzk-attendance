@@ -1,11 +1,11 @@
 import './form-input.styles.scss';
 
-const FormInput = (label,...props) => {
+const FormInput = ({label,...props}) => {
 
     return (
         <div className='form-box'>
-        <label className='label'>{label}</label>
-        <input className='form-input'{...props}></input>
+        <label className='form-label'>{label}</label>
+        <input className='form-input' {...props}></input>
         </div>
 
     );
