@@ -3,6 +3,7 @@ import FormInput from '../../components/form-input/form-input.component';
 import Button from '../../components/button/button.component';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { LoginUser,LogoutUser } from '../../service/auth.service';
 const defaultFormFields = {
     'email' : '',
     'password' : ''
@@ -16,7 +17,6 @@ const Login = ()=> {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        console.log(name,value);
         setFormFields({ ...formFields, [name] : value });
     };
     const resetFormFields = () => {
@@ -28,13 +28,18 @@ const Login = ()=> {
     
         try {   
             console.log(email)
-            // const {user} = await signInAuthUserWithEmailAndPassword(email,password);
+            const response = await LoginUser(email,password);
+
+            console.log(response);
             navigate('/Home');
         }catch(error){
             switch(error.code){
                 case "auth/wrong-password":
                     alert("incorrect password for email");
                     break;
+                case "ERR_NETWORK":
+                    alert("site not reachable");
+                    break;    
                 case "auth/user-not-found":
                     alert("no user associated with this email");
                     break;
