@@ -3,12 +3,12 @@ import { setCurrentUser } from "../store/user/user.action";
 import { useDispatch } from "react-redux";
 import { setUserToken } from "../store/token/token.action";
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = "http://localhost:8080/";
 
   export const LoginUser = (username, password) => {
 
     return axios
-      .post(API_URL + "signin", { username, password })
+      .post(API_URL + "users", { username, password })
       .then((response) => {
         if (response.data.user) {
           return response.data;
