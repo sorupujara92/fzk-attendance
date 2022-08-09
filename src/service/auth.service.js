@@ -5,15 +5,19 @@ import { setUserToken } from "../store/token/token.action";
 
 const API_URL = "http://localhost:8080/";
 
-  export const LoginUser = (username, password) => {
+  export const LoginUser = (email, password) => {
 
     return axios
-      .post(API_URL + "users", { username, password })
+      .post(API_URL + "users", { email, password })
       .then((response) => {
         if (response.data.user) {
+          console.log("11")
+        
           return response.data;
         }
         return response.data;
+        console.log("22")
+
       });
       
   }

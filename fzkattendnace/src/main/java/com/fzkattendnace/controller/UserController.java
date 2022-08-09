@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("/users")
 public class UserController {
 
@@ -38,6 +40,7 @@ public class UserController {
                 usersTokenRepository.save(userToken);
                 UsersResponse usersResponse = new UsersResponse();
                 usersResponse.setToken(uuid.toString());
+                dbUser.get().setPassword("");
                 usersResponse.setUser(dbUser.get());
                 return ResponseEntity.ok(usersResponse);
             }

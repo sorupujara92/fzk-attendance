@@ -4,11 +4,16 @@ import Button from '../../components/button/button.component';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { LoginUser,LogoutUser } from '../../service/auth.service';
+import { setCurrentUser } from '../../store/user/user.action';
+import { setUserToken } from '../../store/token/token.action';
+import { useDispatch } from 'react-redux';
+
 const defaultFormFields = {
     'email' : '',
     'password' : ''
 };
 const Login = ()=> {
+    const dispatch = useDispatch();
 
     const[formFields,setFormFields] = useState(defaultFormFields);
     const navigate = useNavigate();
@@ -29,12 +34,12 @@ const Login = ()=> {
         try {   
             console.log(email)
             const response = await LoginUser(email,password);
-
-            console.log(response);
+            dispatch(setCurrentUser(response.user))
+            dispatch(setUserToken(response.token));
             navigate('/Home');
         }catch(error){
             switch(error.code){
-                case "auth/wrong-password":
+                case "ERR_BAD_REQUEST":
                     alert("incorrect password for email");
                     break;
                 case "ERR_NETWORK":
