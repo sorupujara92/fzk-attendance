@@ -7,7 +7,9 @@ import { LoginUser,LogoutUser } from '../../service/auth.service';
 import { setCurrentUser } from '../../store/user/user.action';
 import { setUserToken } from '../../store/token/token.action';
 import { useDispatch } from 'react-redux';
-
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../store/user/user.selector';
+import { useEffect } from 'react';
 const defaultFormFields = {
     'email' : '',
     'password' : ''
@@ -19,7 +21,13 @@ const Login = ()=> {
     const navigate = useNavigate();
 
     const {email,password} = formFields;
-
+    const currentUser = useSelector(selectCurrentUser)
+    useEffect(() => {
+        if (currentUser){
+         navigate("/Home")   
+        }
+    },[])
+   
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormFields({ ...formFields, [name] : value });
