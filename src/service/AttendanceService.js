@@ -3,22 +3,20 @@ import { useDispatch } from "react-redux";
 
 const API_URL = "http://localhost:8080/";
 
-  export const getDepartments = (department,token) => {
+  export const getDepartments = (token) => {
 
     const config = {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { 'Authorization' : `Bearer ${token}` }
     };
     
-    const bodyParameters = {
-        department: {department}
-    };
-    
+    console.log(config)
     return axios
       .get(API_URL + "department",
-      bodyParameters,
-      config)
+      {
+        headers: { 'Authorization' : `Bearer ${token}` }
+      })
       .then((response) => {
-        console.log(response)
+        return response.data;
       });
       
   }

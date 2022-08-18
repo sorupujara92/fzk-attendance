@@ -54,7 +54,7 @@ public class AuthFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest req, HttpServletResponse res, FilterChain chain) {
     try {
-      if(!req.getRequestURI().equals("/users") && ! req.getMethod().equals("POST")) {
+      if(!req.getRequestURI().equals("/users") && ! req.getMethod().equals("POST") &&  ! req.getMethod().equals("OPTIONS")) {
         SecurityContextHolder.getContext().setAuthentication(null);
         if (StringUtils.isNotBlank(req.getHeader(AUTHORIZATION_HEADER))) {
           setcookiewithoauth(req);

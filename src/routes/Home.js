@@ -10,16 +10,19 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import FormInput from '../components/form-input/form-input.component';
 import Button from '../components/button/button.component';
+import { getDepartments } from '../service/AttendanceService';
 const defaultFormFields = {
-    'department' : '',
+    'departmentsValue' : ["select department"],
+    'department' : ''
 };
 const Home = ()=> {
     const[formFields,setFormFields] = useState(defaultFormFields);
-
-    const {department} = formFields;
+    const currentUser = useSelector(selectCurrentUser)
+    const userToken = useSelector(selectUserToken)
+    const {departmentsValue,department} = formFields;
+    console.log(departmentsValue)
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormFields({ ...formFields, [name] : value });
@@ -28,37 +31,17 @@ const Home = ()=> {
         setFormFields(defaultFormFields);
     }
 
-    const getAttendance = async (event) => {
-        event.preventDefault();
-    
-        try {   
-            // const response = await LoginUser(email,password);
-            console.log(department)
-        }catch(error){
-            switch(error.code){
-                case "ERR_BAD_REQUEST":
-                    alert("incorrect password for email");
-                    break;
-                case "ERR_NETWORK":
-                    alert("site not reachable");
-                    break;    
-                case "auth/user-not-found":
-                    alert("no user associated with this email");
-                    break;
-                default : 
-                    console.log(error);    
-            }
-    
-        }
-        
-    }
-    const currentUser = useSelector(selectCurrentUser)
-    const userToken = useSelector(selectUserToken)
     useEffect(() => {
-        if (!currentUser){
-         navigate("/")   
-        }
-    },[])
+        const getDepartment = async () => {
+          const departmentArray = await getDepartments(userToken);
+          console.log(departmentArray.departments)
+          if(departmentArray.departments.length>0) {
+          setFormFields({ ...formFields, ['departmentsValue'] : departmentArray.departments });
+          }
+        };
+    getDepartment();   
+},
+    [])
     
     const signOutUser = () => {
         dispatch(setCurrentUser(null))
@@ -75,8 +58,14 @@ const Home = ()=> {
             </div>
 
             <div className="search-page">
-                <form onSubmit={getAttendance}>
-                <FormInput  type='text' required label='Department' onChange={handleChange} value={department} name='department'></FormInput>
+                <form onSubmit={null}>
+                <select className='select-box' value={department} name='department' onChange={handleChange}> {departmentsValue.map(department => (
+                    <option key={department} value={department}>
+                        {department}
+                    </option>
+))}
+                 </select>;
+                {/* <FormInput  type='text' required label='Department' onChange={handleChange} value={department} name='department'></FormInput> */}
                 <Button type="submit"  children="search"></Button>
                 </form>   
             </div>
