@@ -10,21 +10,23 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import FormInput from '../components/form-input/form-input.component';
 import Button from '../components/button/button.component';
-import { getDepartments } from '../service/AttendanceService';
+import { getAttendance, getDepartments } from '../service/AttendanceService';
 const defaultFormFields = {
     'departmentsValue' : ["select department"],
-    'department' : ''
+    'selectedDepartment' : '',
+    'employeesData' : []
 };
 const Home = ()=> {
     const[formFields,setFormFields] = useState(defaultFormFields);
     const currentUser = useSelector(selectCurrentUser)
     const userToken = useSelector(selectUserToken)
-    const {departmentsValue,department} = formFields;
+    const {departmentsValue,selectedDepartment,employeesData} = formFields;
     console.log(departmentsValue)
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleChange = (event) => {
         const { name, value } = event.target;
+        console.log(name+value)
         setFormFields({ ...formFields, [name] : value });
     };
     const resetFormFields = () => {
@@ -48,6 +50,25 @@ const Home = ()=> {
         dispatch(setUserToken(null));
         navigate("/")   
     }
+
+    const getAttendanceData = async (event) => {
+        event.preventDefault();
+        console.log(selectedDepartment)
+        try {   
+            const response = await getAttendance(selectedDepartment,userToken);
+            setFormFields({ ...formFields, ['employeesData'] : response });
+            console.log(response)
+        }catch(error){
+            switch(error.code){
+                default : 
+                    console.log(error);    
+            }
+    
+        }
+        
+    }
+
+
     return (
 
         <div className="home-component">
@@ -58,8 +79,8 @@ const Home = ()=> {
             </div>
 
             <div className="search-page">
-                <form onSubmit={null}>
-                <select className='select-box' value={department} name='department' onChange={handleChange}> {departmentsValue.map(department => (
+                <form onSubmit={getAttendanceData}>
+                <select className='select-box' value={selectedDepartment} name='selectedDepartment' onChange={handleChange}> {departmentsValue.map(department => (
                     <option key={department} value={department}>
                         {department}
                     </option>
@@ -70,6 +91,30 @@ const Home = ()=> {
                 </form>   
             </div>
 
+            <div className='employeesList'>
+                <div>
+                    <table border="2" cellPadding="30">
+                    <tr> 
+                        <th>InTime</th>
+                        <th>OutTime</th>
+                        <th>attendanceDate</th>
+                        <th>employeeName</th>
+                        <th>departmentFname</th>
+                    </tr>
+                    {
+                        employeesData.map(employee => (
+                        <tr>
+                            <td>{employee.inTime}</td>
+                            <td>{employee.outTime}</td>
+                            <td>{employee.attendanceDate}</td>
+                            <td>{employee.employeeName}</td>
+                            <td>{employee.departmentFname}</td>
+                        </tr>
+                        ))
+                    }
+                    </table>
+              </div>
+            </div>
         </div>
     );
 }

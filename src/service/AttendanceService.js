@@ -18,7 +18,26 @@ const API_URL = "http://localhost:8080/";
       .then((response) => {
         return response.data;
       });
-      
+    }
+      export const getAttendance = (department,token) => {
+
+        const config = {
+            headers: { 'Authorization' : `Bearer ${token}` }
+        };
+        
+        console.log(config)
+        return axios
+          .get(API_URL + "attendance",
+          {
+            headers: { 'Authorization' : `Bearer ${token}` },
+            params: {
+                'department': `del_${department}`
+              }
+          })
+          .then((response) => {
+            return response.data;
+          });
+          
   }
 
 
